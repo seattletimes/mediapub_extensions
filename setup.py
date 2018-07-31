@@ -4,7 +4,7 @@ setup(
     name="mediapub_extensions",
     version='0.0.1a2.dev5',
     url='TBD',
-    license="MIT",
+    license="Apache 2.0",
     author="David Parks",
     author_email="businessintelligence@seattletimes.com",
     description="Tools for Media Publishers",
@@ -14,4 +14,5 @@ setup(
     install_requires=['snowflake-connector-python==1.6.3']
     # setup_requires=[],
     # test_suite=''
+    # keywords = ''
 )
