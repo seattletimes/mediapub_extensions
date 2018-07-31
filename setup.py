@@ -11,6 +11,7 @@ setup(
     packages=find_packages(exclude=['tests']),
     # long_description=open('README.md').read(),
     zip_safe=False,
+    install_requires=['snowflake-connector-python==1.6.3'],
     # setup_requires=[],
     # test_suite=''
 )
