@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="mediapub_extensions",
-    version='0.0.1a2.dev4',
+    version='0.0.1a2.dev5',
     url='TBD',
     license="MIT",
     author="David Parks",
