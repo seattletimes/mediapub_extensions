@@ -42,7 +42,7 @@ class Snowflake():
         """
 
         self.verbose = verbose
-        
+
         # First try passed in username and pass, then look for a keyfile, then ask the user
         if username is not None and password is not None and account is not None:
             self.set_creds_by_param(username, password, account)
@@ -139,4 +139,5 @@ class Snowflake():
 
 if __name__=='__main__':
     sf = Snowflake()
+    sf.set_environment_settings("ETL_PULL", "ST_WEB", "ST_WEB_WH_PROD_ETL", "WEB_PROD")
     print(sf.get_snowflake_version())
