@@ -25,7 +25,7 @@ class Snowflake():
     account = None
     ctx = None
 
-    def __init__(self, username=None, password=None, account=None, role='STAGE_R', db='ST_WEB', warehouse='ST_ANALYTICSAPI', schema='WEB_STAGE_META'):
+    def __init__(self, username=None, password=None, account=None, role='STAGE_R', db='ST_WEB', warehouse='ST_ANALYTICSAPI', schema='WEB_STAGE_META', verbose=False):
         """
         Create a Snowflake connection for this instance.
 
@@ -41,12 +41,15 @@ class Snowflake():
             snowflake.connector.connect: A Snowflake connection
         """
 
+        self.verbose = verbose
+        
         # First try passed in username and pass, then look for a keyfile, then ask the user
         if username is not None and password is not None and account is not None:
             self.set_creds_by_param(username, password, account)
         else:
             self.set_creds()
         self.set_environment_settings(role, db, warehouse, schema)
+        if self.verbose: print("connecting to Snowflake...")
         self.ctx = snowcon.connect(user=self.user, password=self.password, account=self.account)
 
     #####################################################
