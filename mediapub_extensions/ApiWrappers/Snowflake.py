@@ -46,7 +46,7 @@ class Snowflake():
             self.set_creds_by_param(username, password, account)
         else:
             self.set_creds()
-        set_environment_settings(role, db, warehouse, schema)
+        self.set_environment_settings(role, db, warehouse, schema)
         self.ctx = snowcon.connect(user=self.user, password=self.password, account=self.account)
 
     #####################################################
