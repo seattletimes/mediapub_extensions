@@ -42,14 +42,11 @@ class Snowflake():
         """
 
         # First try passed in username and pass, then look for a keyfile, then ask the user
-        try:
-            if username is not None and password is not None and account is not None:
-                self.set_creds_by_param(username, password)
-            else:
-                self.set_creds()
-            set_environment_settings(role, db, warehouse, schema)
-        except:
-            pass
+        if username is not None and password is not None and account is not None:
+            self.set_creds_by_param(username, password, account)
+        else:
+            self.set_creds()
+        set_environment_settings(role, db, warehouse, schema)
         self.ctx = snowcon.connect(user=self.user, password=self.password, account=self.account)
 
     #####################################################
