@@ -85,10 +85,10 @@ class Snowflake():
             schema (str): SQL to set the schema queries are run from.
         """
 
-        self.ROLE = "USE ROLE PROD_R;"
-        self.DB = "USE ST_WEB;"
-        self.WAREHOUSE = "USE WAREHOUSE ST_ANALYTICSAPI;"
-        self.SCHEMA = "USE SCHEMA WEB_PROD_META;"
+        self.ROLE = "USE ROLE {};".format(role)
+        self.DB = "USE {};".format(db)
+        self.WAREHOUSE = "USE WAREHOUSE {};".format(warehouse)
+        self.SCHEMA = "USE SCHEMA {};".format(schema)
 
     def run_query(self, SQL_CMD="SELECT current_version()"):
         """
