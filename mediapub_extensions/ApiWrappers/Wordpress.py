@@ -128,7 +128,7 @@ class Wordpress(object):
             url = url + "page={}".format(page)
             iter = True
             if iter: #TODO remove this extra if.
-                while 1 #page <= 10: # For testing, only get the first 10 pages instead of all of them. #TODO: remove
+                while True #page <= 10: # For testing, only get the first 10 pages instead of all of them. #TODO: remove
                     # Replace the page param with an updated one.
                     #NOTE: This fails to replace on the first iteration since there is no page -1 value found.  Expected.
                     url = url.replace('&page=' + str(page - 1), '&page=' + str(page))
