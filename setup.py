@@ -12,7 +12,8 @@ setup(
     # long_description=open('README.md').read(),
     zip_safe=False,
     install_requires=['snowflake-connector-python==1.6.3',
-                      'google-api-python-client==1.7.4'
+                      'google-api-python-client==1.7.4',
+                      'oauth2client==4.1.2'
                       ]
     # setup_requires=[],
     # test_suite=''
