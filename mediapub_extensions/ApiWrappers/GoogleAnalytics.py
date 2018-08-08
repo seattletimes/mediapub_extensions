@@ -27,6 +27,9 @@ class GoogleAnalytics(object):
     def add_query_to_request(self, params):
         self.requests.append(self.build_query(params))
 
+    def flush_requests(self):
+        self.requests = []
+
     def send_requests(self):
         result = self.analytics.reports().batchGet(body={'reportRequests': self.requests}).execute()
         self.requests = []
@@ -132,7 +135,7 @@ class GoogleAnalytics(object):
 
 if __name__=='__main__':
     import datetime
-
+    key_path = os.path.join(os.path.abspath(os.sep), 'Users', 'dparks', 'BigQuery-422148a82d7c.json')
     ga = GoogleAnalytics(key_path, '91048887', verbose=True)
 
     queries = {
