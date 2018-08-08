@@ -28,11 +28,12 @@ class GoogleAnalytics(object):
         self.requests.append(self.build_query(params))
 
     def flush_requests(self):
-        self.requests = []
+        self.requests.clear()
+        # self.requests = []
 
     def send_requests(self):
         result = self.analytics.reports().batchGet(body={'reportRequests': self.requests}).execute()
-        self.requests = []
+        self.requests.clear()
         return result
 
     def build_query(self, params):
@@ -136,19 +137,20 @@ class GoogleAnalytics(object):
 if __name__=='__main__':
     import datetime
     key_path = os.path.join(os.path.abspath(os.sep), 'Users', 'dparks', 'BigQuery-422148a82d7c.json')
-    ga = GoogleAnalytics(key_path, '91048887', verbose=True)
 
-    queries = {
-        'metrics': ['ga:pageviews', 'ga:users'],
-        'dimensions': [
-            'ga:date',
-            # 'ga:dimension18', # articleId
-            # 'ga:dimension40', # pubdate
-        ],
-        'filters': {'ga:date': datetime.datetime.now().strftime("%Y%m%d")}
-    }
-    ga.add_query_to_request(queries)
-    resp = ga.send_requests()
-    print(resp)
-    results = ga.parse_response(resp)
-    print(results)
+    for i in range(10):
+        ga = GoogleAnalytics(key_path, '91048887', verbose=True)
+        queries = {
+            'metrics': ['ga:pageviews', 'ga:users'],
+            'dimensions': [
+                'ga:date',
+                # 'ga:dimension18', # articleId
+                # 'ga:dimension40', # pubdate
+            ],
+            'filters': {'ga:date': datetime.datetime.now().strftime("%Y%m%d")}
+        }
+        ga.add_query_to_request(queries)
+        results = ga.parse_response(ga.send_requests())
+        print(i, results)
+        ga.flush_requests()
+        ga = None
