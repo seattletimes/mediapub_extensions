@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="mediapub_extensions",
-    version='0.0.1a3.dev1',
+    version='0.0.1a4.dev1',
     url='TBD',
     license="Apache 2.0",
     author="David Parks",
@@ -13,6 +13,7 @@ setup(
     zip_safe=False,
     install_requires=['snowflake-connector-python==1.6.3',
                       'google-api-python-client==1.7.4',
+                      'google-cloud==0.27.0',
                       'oauth2client==4.1.2'
                       ]
     # setup_requires=[],
