@@ -119,6 +119,7 @@ class BigQuery(object):
         rows = results.fetch_data(max_results=max_results, page_token=page_token)
 
         while fetch_all:
+            if self.verbose: print("Fetching next page...")
             row_dat = list(rows)
             for row in row_dat:
                 data.append(row)
