@@ -93,7 +93,11 @@ class Snowflake():
         self.WAREHOUSE = "USE WAREHOUSE {};".format(warehouse)
         self.SCHEMA = "USE SCHEMA {};".format(schema)
 
-    def run_query(self, SQL_CMD="SELECT current_version()"):
+    #####################################################
+    # Query Methods
+    #####################################################
+
+    def run_query(self, SQL_CMD="SELECT current_version()", ignore_results=False):
         """
         Run a supplied query on Snowflake
 
@@ -121,10 +125,24 @@ class Snowflake():
             cs.execute(self.SCHEMA)
             cs.execute(self.WAREHOUSE)
             cs.execute(SQL_CMD)
+            if ignore_results: return True
             results = cs.fetchall()
             return results
         finally:
             cs.close()
+
+    def push_files(self, PATH, stage):
+        SQL_PUT = "put file://" + PATH + " @S_" + stage + " auto_compress=true;"
+        return self.run_query(SQL_PUT, ignore_results=True)
+        pass
+
+    def process_files(self, table, stage, format, on_error="SKIP_FILE", purge=True):
+        SQL_COPY = "copy into " + table + " "\
+                "from @S_" + stage + " "\
+                "file_format = (format_name = " + format + ") "\
+                "ON_ERROR = " + on_error " "\
+                "PURGE = " + purge + ";"
+        return self.run_query(SQL_COPY, ignore_results=True)
 
     ############################################################
     # Queries
