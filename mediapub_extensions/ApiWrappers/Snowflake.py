@@ -140,7 +140,7 @@ class Snowflake():
         SQL_COPY = "copy into " + table + " "\
                 "from @S_" + stage + " "\
                 "file_format = (format_name = " + format + ") "\
-                "ON_ERROR = " + on_error " "\
+                "ON_ERROR = " + on_error + " "\
                 "PURGE = " + purge + ";"
         return self.run_query(SQL_COPY, ignore_results=True)
 
