@@ -144,7 +144,7 @@ class BigQuery(object):
         if self.verbose: print("Starting load of {} to {} as {}".format(table_id, destination_url, job_id))
 
         extract_job = self.client.extract_table_to_storage(job_id, table_ref, destination_url)
-        extract_job.format = DestinationFormat("NEWLINE_DELIMITED_JSON")
+        extract_job.destination_format = "NEWLINE_DELIMITED_JSON"
         extract_job._build_resource()
         extract_job.begin()
         result = extract_job.result().state
