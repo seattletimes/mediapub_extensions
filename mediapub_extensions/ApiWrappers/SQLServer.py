@@ -19,13 +19,11 @@ class SQLServer():
     """
 
     verbose = False
-#     user = None
-#     password = None
-#     account = None
-#     ctx = None
-#
-    def __init__(self, dsn, user_id, password, trusted_connection = False, verbose=True):
-         # , username=None, password=None, account=None,  verbose=False):
+    conn_string = None
+    cursor = None
+
+
+    def __init__(self, dsn=None, user_id=None, password=None, trusted_connection = False, verbose=True):
         """
         Create a SQL Server connection for this instance.
 
@@ -39,64 +37,32 @@ class SQLServer():
         """
         self.verbose = verbose
         if self.verbose: print("initializing SQLServer")
-        conn_string = "DSN={};UID={};PWD={};Trusted_Connection={}".format(dsn, user_id, password, trusted_connection)
+        conn_string = self.__get_conn_string(dsn, user_id, password, trusted_connection)
         print(conn_string)
-#         self.verbose = verbose
-#
-#         # First try passed in username and pass, then look for a keyfile, then ask the user
-#         if username is not None and password is not None and account is not None:
-#             self.set_creds_by_param(username, password, account)
-#         else:
-#             self.set_creds()
-#         self.set_environment_settings(role, db, warehouse, schema)
-#         if self.verbose: print("connecting to Snowflake...")
-#         self.ctx = snowcon.connect(user=self.user, password=self.password, account=self.account)
-#
-#     #####################################################
-#     # Connection Methods
-#     #####################################################
-#
-#     def set_creds(self):
-#         """ Get the Username and Password from the user """
-#
-#         self.account = input("Snowflake Account = ")
-#         self.user = input("Snowflake UserName = ")
-#         self.password = getpass.getpass()
-#
-#     def set_creds_by_param(self, username, passwd, account):
-#         """ Set the Username and Password from the Args """
-#
-#         self.account = account
-#         self.user = username
-#         self.password = passwd
-#
-#     def set_environment_settings(self, role='STAGE_R', db='ST_WEB', warehouse='ST_ANALYTICSAPI', schema='WEB_STAGE_META'):
-#         """
-#         Return settings to reach the Snowflake Enviornment
-#
-#         Return SQL to set the settings that are used to reach
-#         Snowflake enviornments.  Currently, production and staging
-#         are the only enviornments in use.
-#
-#         Args:
-#             env (str): The Snowflake enviornment settings to return
-#
-#         Returns:
-#             role (str): SQL to set the correct Role.
-#             db (str): SQL to set the target database.
-#             warehouse (str): SQL to set the warehouse for data processing.
-#             schema (str): SQL to set the schema queries are run from.
-#         """
-#
-#         self.ROLE = "USE ROLE {};".format(role)
-#         self.DB = "USE {};".format(db)
-#         self.WAREHOUSE = "USE WAREHOUSE {};".format(warehouse)
-#         self.SCHEMA = "USE SCHEMA {};".format(schema)
-#
-#     #####################################################
-#     # Query Methods
-#     #####################################################
-#
+        self.conn_string = conn_string
+        self.__set_cursor(conn_string)
+
+    #####################################################
+    # Connection Methods
+    #####################################################
+
+    def __set_cursor(self, conn_string):
+        conn = pyodbc.connect(self.conn_string)
+        self.cursor = conn.cursor()
+
+    def __get_conn_string(self, dsn=None, user_id=None, password=None, trusted_connection = False):
+        if dsn and user_id and password:
+            return "DSN={};UID={};PWD={};Trusted_Connection={}".format(dsn, user_id, password, trusted_connection)
+        else:
+            dsn = input("DSN = ")
+            uid = input("Username = ")
+            password = getpass.getpass()
+            return "DSN={};UID={};PWD={};Trusted_Connection={}".format(dsn, user_id, password, trusted_connection)
+
+    #####################################################
+    # Query Methods
+    #####################################################
+
 #     def run_query(self, SQL_CMD="SELECT current_version()", ignore_results=False):
 #         """
 #         Run a supplied query on Snowflake
@@ -130,30 +96,7 @@ class SQLServer():
 #             return results
 #         finally:
 #             cs.close()
-#
-#     def push_files(self, PATH, stage):
-#         SQL_PUT = "put file://" + PATH + " @S_" + stage + " auto_compress=true;"
-#         return self.run_query(SQL_PUT, ignore_results=True)
-#         pass
-#
-#     def process_files(self, table, stage, format, on_error="SKIP_FILE", purge=True):
-#         SQL_COPY = "copy into " + table + " "\
-#                 "from @S_" + stage + " "\
-#                 "file_format = (format_name = " + format + ") "\
-#                 "ON_ERROR = " + on_error + " "\
-#                 "PURGE = " + purge + ";"
-#         return self.run_query(SQL_COPY, ignore_results=True)
-#
-#     ############################################################
-#     # Queries
-#     ############################################################
-#
-#     def get_snowflake_version(self):
-#         """Return the Snowflake version number."""
-#
-#         results = self.run_query()
-#         return results[0][0]
-#
-#
+
+
 if __name__=='__main__':
     sql = SQLServer("MSSQLAudre", "readonly", "pass")
