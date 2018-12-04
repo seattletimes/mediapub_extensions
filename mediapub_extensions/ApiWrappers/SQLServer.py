@@ -68,7 +68,7 @@ class SQLServer():
             db = input("Database = ")
             uid = input("Username = ")
             password = getpass.getpass()
-            return "DRIVER={};SERVER={};DATABASE={};UID={};PWD={};Trusted_Connection={}".format(driver, server, db, user_id, password, trusted_connection)
+            return "DRIVER={};SERVER={};DATABASE={};UID={};PWD={};Trusted_Connection={}".format(driver, server, db, uid, password, trusted_connection)
 
     #####################################################
     # Query Methods
