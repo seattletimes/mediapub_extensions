@@ -3,6 +3,7 @@ import time
 import datetime
 from google.cloud import bigquery
 import google.cloud.bigquery.job
+from google.cloud.bigquery.job import DestinationFormat
 from google.cloud import storage
 import os
 import json
@@ -136,9 +137,24 @@ class BigQuery(object):
         if self.verbose: print("Processed " + str(tot) + " results")
         return data, cols, tot
 
+    def export_table(self, project, dataset, table_id, bucket, filename, format="JSON"):
+        destination_url = "gs://{}/{}".format(bucket, filename)
+        job_id = str(uuid.uuid4())
+        table_ref = self.client.dataset(dataset, project=project).table(table_id)
+        if self.verbose: print("Starting load of {} to {} as {}".format(table_id, destination_url, job_id))
+
+        extract_job = self.client.extract_table_to_storage(job_id, table_ref, destination_url)
+        extract_job.destination_format = "NEWLINE_DELIMITED_JSON"
+        extract_job._build_resource()
+        extract_job.begin()
+        result = extract_job.result().state
+        if self.verbose: print("Job {} is finished with a status of {}".format(job_id, result))
+        return job_id, result
+
 if __name__ == '__main__':
     bq = BigQuery("C:\\BigQuery-422148a82d7c.json", 'feisty-gateway-727', verbose=True)
-    results = bq.run_query("SELECT * FROM `feisty-gateway-727.stAdHoc.ap_entitlements` LIMIT 10")
-    data, schema, tot = bq.process_results(results)
+    # results = bq.run_query("SELECT * FROM `feisty-gateway-727.stAdHoc.ap_entitlements` LIMIT 10")
+    # data, schema, tot = bq.process_results(results)
     # print(data)
     # print(schema)
+    print(bq.export_table('feisty-gateway-727', 'flatData', 'st_PVs_20181002', 'st-databackup/91048887', 'st_PVs_20181002-*.json'))

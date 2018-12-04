@@ -14,7 +14,8 @@ setup(
     install_requires=['snowflake-connector-python==1.6.3',
                       'google-api-python-client==1.7.4',
                       'google-cloud==0.27.0',
-                      'oauth2client==4.1.2'
+                      'oauth2client==4.1.2',
+                      'googleads==14.1.0'
                       ]
     # setup_requires=[],
     # test_suite=''
