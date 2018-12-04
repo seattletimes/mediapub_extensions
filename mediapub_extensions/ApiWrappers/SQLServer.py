@@ -24,7 +24,7 @@ class SQLServer():
     cursor = None
 
 
-    def __init__(self, dsn=None, driver=None, server=None, db=None, user_id=None, password=None, trusted_connection = False, verbose=True):
+    def __init__(self, dsn=None, driver=None, server=None, db=None, user_id=None, password=None, trusted_connection = False, verbose=False):
         """
         Create a SQL Server connection for this instance.
 
