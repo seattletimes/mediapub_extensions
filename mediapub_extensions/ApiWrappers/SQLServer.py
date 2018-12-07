@@ -22,6 +22,7 @@ class SQLServer():
     verbose = False
     conn_string = None
     cursor = None
+    conn = None
 
 
     def __init__(self, dsn=None, driver=None, server=None, db=None, user_id=None, password=None, trusted_connection = False, verbose=False):
@@ -50,7 +51,7 @@ class SQLServer():
     def __set_cursor(self, conn_string):
         """ Connect to the server and get a cursor """
 
-        conn = pyodbc.connect(conn_string)
+        self.conn = pyodbc.connect(conn_string)
         self.cursor = conn.cursor()
 
     def __get_conn_string(self, dsn=None, driver=None, server=None, db=None, user_id=None, password=None, trusted_connection = False):
@@ -74,7 +75,7 @@ class SQLServer():
     # Query Methods
     #####################################################
 
-    def run_query(self, query):
+    def run_query(self, query, results=True):
         """
         Run a SQL query and optionally return the results
 
@@ -89,7 +90,14 @@ class SQLServer():
 
         #NOTE: This should probably return standard python objects intead of pyodbc.Row
         #TODO: This should get some injection checking.  For now assuming good faith actors
-        return self.cursor.execute(query).fetchall()
+        query = self.cursor.execute(query)
+        if results:
+            return self.cursor.fetchall()
+        else:
+            return True
+
+    def commit():
+        return self.conn.commit()
 
     def get_cols(self):
         """ Get the column names as a list """
