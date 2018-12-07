@@ -96,7 +96,7 @@ class SQLServer():
         else:
             return True
 
-    def commit():
+    def commit(self):
         return self.conn.commit()
 
     def get_cols(self):
