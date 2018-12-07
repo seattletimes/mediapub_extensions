@@ -52,7 +52,7 @@ class SQLServer():
         """ Connect to the server and get a cursor """
 
         self.conn = pyodbc.connect(conn_string)
-        self.cursor = conn.cursor()
+        self.cursor = self.conn.cursor()
 
     def __get_conn_string(self, dsn=None, driver=None, server=None, db=None, user_id=None, password=None, trusted_connection = False):
         """ Build the auth connection string """
