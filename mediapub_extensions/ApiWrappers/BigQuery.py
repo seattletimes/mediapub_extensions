@@ -138,6 +138,24 @@ class BigQuery(object):
         return data, cols, tot
 
     def export_table(self, project, dataset, table_id, bucket, filename, format="JSON"):
+        """
+        Saves a table to GCS
+
+        Save the data from Google BigQuery to Google Cloud Storage (GCS)
+
+        Args:
+            project (str): The GCP Project name
+            dataset (str): The name of the dataset containing the table in question
+            table_id (str): The table name
+            bucket (str): The GCS bucket location (i.e. folder)
+            filename (str): The desired filename of the output files
+            format (str): The format of the resulting file
+
+        Returns:
+            job_id (str): The ID of the job
+            result (str): The final state of the job
+        """
+        
         destination_url = "gs://{}/{}".format(bucket, filename)
         job_id = str(uuid.uuid4())
         table_ref = self.client.dataset(dataset, project=project).table(table_id)
