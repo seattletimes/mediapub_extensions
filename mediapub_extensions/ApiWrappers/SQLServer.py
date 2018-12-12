@@ -17,6 +17,9 @@ class SQLServer():
         conn_string (str): The SQL Server connection string
         cursor (pyodbc.cursor): The ODBC cursor https://docs.microsoft.com/en-us/sql/odbc/reference/develop-app/cursors?view=sql-server-2017
         verbose (bool): The verbosity flag
+
+    Resources:
+        https://github.com/mkleehammer/pyodbc/issues/276
     """
 
     verbose = False
