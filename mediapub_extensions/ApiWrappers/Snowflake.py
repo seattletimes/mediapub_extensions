@@ -132,11 +132,15 @@ class Snowflake():
             cs.close()
 
     def push_files(self, PATH, stage):
+        """ Push the file to Snowflake Stage """
+
         SQL_PUT = "put file://" + PATH + " @S_" + stage + " auto_compress=true;"
         return self.run_query(SQL_PUT, ignore_results=True)
         pass
 
     def process_files(self, table, stage, format, on_error="SKIP_FILE", purge=True):
+        """ Process staged files """
+
         SQL_COPY = "copy into " + table + " "\
                 "from @S_" + stage + " "\
                 "file_format = (format_name = " + format + ") "\
