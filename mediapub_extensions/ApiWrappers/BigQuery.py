@@ -72,7 +72,7 @@ class BigQuery(object):
         if destination_table is not None:
             #NOTE: This is always set to true now, why would we ever not want large results, can be parameterized
             job.allow_large_results = True
-            self.dataset = self.client.dataset(datasetIn) #NOTE: This saved to the class before, is that still needed?
+            self.dataset = self.client.dataset(destination_dataset) #NOTE: This saved to the class before, is that still needed?
             job.destination = self.dataset.table(destination_table)
             job.create_disposition = (google.cloud.bigquery.job.CreateDisposition.CREATE_IF_NEEDED) #NOTE: This might need to be parameterized
             if truncate:
@@ -155,7 +155,7 @@ class BigQuery(object):
             job_id (str): The ID of the job
             result (str): The final state of the job
         """
-        
+
         destination_url = "gs://{}/{}".format(bucket, filename)
         job_id = str(uuid.uuid4())
         table_ref = self.client.dataset(dataset, project=project).table(table_id)
