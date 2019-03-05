@@ -137,7 +137,7 @@ class BigQuery(object):
         if self.verbose: print("Processed " + str(tot) + " results")
         return data, cols, tot
 
-    def export_table(self, project, dataset, table_id, bucket, filename, format="JSON"):
+    def export_table(self, project, dataset, table_id, bucket, filename, format="NEWLINE_DELIMITED_JSON"):
         """
         Saves a table to GCS
 
@@ -162,7 +162,7 @@ class BigQuery(object):
         if self.verbose: print("Starting load of {} to {} as {}".format(table_id, destination_url, job_id))
 
         extract_job = self.client.extract_table_to_storage(job_id, table_ref, destination_url)
-        extract_job.destination_format = "NEWLINE_DELIMITED_JSON"
+        extract_job.destination_format = format
         extract_job._build_resource()
         extract_job.begin()
         result = extract_job.result().state
@@ -170,9 +170,4 @@ class BigQuery(object):
         return job_id, result
 
 if __name__ == '__main__':
-    bq = BigQuery("C:\\BigQuery-422148a82d7c.json", 'feisty-gateway-727', verbose=True)
-    # results = bq.run_query("SELECT * FROM `feisty-gateway-727.stAdHoc.ap_entitlements` LIMIT 10")
-    # data, schema, tot = bq.process_results(results)
-    # print(data)
-    # print(schema)
-    print(bq.export_table('feisty-gateway-727', 'flatData', 'st_PVs_20181002', 'st-databackup/91048887', 'st_PVs_20181002-*.json'))
+    print("Don't call directly.  Install package and import as a class.")
