@@ -169,5 +169,16 @@ class BigQuery(object):
         if self.verbose: print("Job {} is finished with a status of {}".format(job_id, result))
         return job_id, result
 
+    def download_export(self, bucket, filename, destination_filename=None):
+        if not destination_filename: destination_filename = filename
+        storage_client = storage.Client.from_service_account_json(self.credentials, project=self.project)
+        bucket = storage_client.get_bucket(bucket)
+        bucket.blob(filename).download_to_filename(destination_filename)
+
+    def get_gcs_files(self, bucket):
+        storage_client = storage.Client.from_service_account_json(self.credentials, project=self.project)
+        bucket = storage_client.get_bucket(bucket)
+        return [b.name for b in bucket.list_blobs()]
+
 if __name__ == '__main__':
     print("Don't call directly.  Install package and import as a class.")
