@@ -180,5 +180,11 @@ class BigQuery(object):
         bucket = storage_client.get_bucket(bucket)
         return [b.name for b in bucket.list_blobs()]
 
+    def delete_gcs_files(self, bucket, file):
+        storage_client = storage.Client.from_service_account_json(self.credentials, project=self.project)
+        bucket = storage_client.get_bucket(bucket)
+        blob = bucket.blob(blob_name)
+        blob.delete()
+
 if __name__ == '__main__':
     print("Don't call directly.  Install package and import as a class.")
