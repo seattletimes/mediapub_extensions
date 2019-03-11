@@ -183,7 +183,7 @@ class BigQuery(object):
     def delete_gcs_files(self, bucket, file):
         storage_client = storage.Client.from_service_account_json(self.credentials, project=self.project)
         bucket = storage_client.get_bucket(bucket)
-        blob = bucket.blob(blob_name)
+        blob = bucket.blob(file)
         blob.delete()
 
 if __name__ == '__main__':
