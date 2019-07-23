@@ -16,7 +16,7 @@ setup(
                       'google-cloud==0.27.0',
                       'oauth2client==4.1.2',
                       'pyodbc',
-                      'googleads==14.1.0'
+                      'googleads==20.0.0'
                       ]
     # setup_requires=[],
     # test_suite=''
