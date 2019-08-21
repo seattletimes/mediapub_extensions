@@ -62,12 +62,14 @@ class GoogleAdManager(object):
 
     def get_all_networks(self):
         """ Get a List of all Networks on the Account"""
-        networks = self.client.GetService("NetworkService").getAllNetworks()
+        network_service = self.get_service("NetworkService")
+        networks = network_service.getAllNetworks()
         return networks
 
     def get_current_network(self):
         """ Get a the Current Network Set on the Account"""
-        network = self.client.GetService("NetworkService", version='v201808').getCurrentNetwork()
+        network_service = self.get_service("NetworkService")
+        network = network_service.getCurrentNetwork()
         return network
 
     def set_current_network(self):
@@ -76,6 +78,39 @@ class GoogleAdManager(object):
         """
         #TODO: Do this!!
         raise NotImplementedError
+
+    def get_service(self, service='reporting', version='v201908'):
+        """
+        Get a Service
+
+        Returns a specific Ad Manager Service for the client to build requests
+
+        Args:
+            service (str): The requested service
+            version (str): The Ad Manager version
+
+        Returns:
+            googleads.common.GoogleSoapService: A Google Service Worker
+
+        Resources:
+            https://developers.google.com/ad-manager/api/rel_notes
+            https://github.com/googleads/googleads-python-lib/blob/master/googleads/ad_manager.py#L46-L131
+        """
+
+        # Confirm that the request is for a valid service.
+        # NOTE: Google's errors are fairly clear when there is an incorrect version number,
+        # NOTE (cont): but less clear about an invalid service.  Handling that case here to make it more obvious.
+        if version in ad_manager._SERVICE_MAP:
+            if service not in ad_manager._SERVICE_MAP[version]: raise ImportError("Invalid Service Requested")
+        service = self.client.GetService(service, version=version)
+        return service
+
+    def get_statement(self, version='v201908'):
+        """ Return a statement builder """
+
+        # TODO: IT would be nice is this versioning worked together with the version
+        # TODO (cont): in get_service() instead of having to send it twice.
+        return ad_manager.StatementBuilder(version=version)
 
     #***************************************************************************
     # Data Request Methods
@@ -166,14 +201,53 @@ class GoogleAdManager(object):
                     data.append(row)
         return data, cols, meta
 
+    #***************************************************************************
+    # Data Requests
+    #***************************************************************************
+
+    def get_companies(self):
+        """
+        Get all Companies
+
+        An example method that uses the CompanyService to get a list of all the Companies
+        from Ad Manager.  This is a modifed version of a Google example.
+
+        Returns:
+            dict: the total number of results and a list of companies.
+
+        Resources:
+            https://github.com/googleads/googleads-python-lib/blob/master/examples/ad_manager/v201905/company_service/get_all_companies.py
+            https://admanager.google.com/{network-code}#admin/listCompanies
+        """
+
+        # Get the a Service and StatementBuilder to handle the request
+        company_service = self.get_service('CompanyService', version='v201908')
+        statement = self.get_statement(version='v201908')
+        # Creating the response outside of the loop
+        returned_response = {'totalResults': 0, 'response': []}
+
+        # Page through results and add them to the returned_response
+        while True:
+            response = company_service.getCompaniesByStatement(statement.ToStatement())
+
+            # If results are (still) returned, add them to the returned_response and update the query offset
+            if 'results' in response and len(response['results']):
+                returned_response['totalResults'] = response['totalResultSetSize']
+                returned_response['response'].extend(response['results'])
+                statement.offset += statement.limit
+            else:
+                break
+
+        return returned_response
+
 
 if __name__ == '__main__':
-    dfp = GoogleAdManager(verbose=True) # cred_file="C:\\BigQuery-422148a82d7c.json",
+    dfp = GoogleAdManager(verbose=True)
 
     # Sample Query
-    query = ('SELECT BuyerAccountId, Name '
-             'FROM Programmatic_Buyer '
-             'ORDER BY BuyerAccountId ASC'
+    query = ('SELECT Id, Name, ExternalId, LastModifiedDateTime, LineItemType '
+             'FROM Line_Item '
+             'ORDER BY Id ASC '
              )
 
     # Sample Report
@@ -187,5 +261,6 @@ if __name__ == '__main__':
         }
     }
 
-    # dfp.run_pql(query)
-    print(dfp.run_request(report_job))
+    # print(dfp.run_pql(query))
+    # print(dfp.run_request(report_job))
+    print(dfp.get_all_networks())
