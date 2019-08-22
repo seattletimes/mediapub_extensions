@@ -26,7 +26,7 @@ class GoogleAdManager(object):
     # Connection Methods
     #********************************************************
 
-    def __init__(self, credentials_file=None, verbose=False):
+    def __init__(self, credentials_file=None, network_code=None, verbose=False):
         """
         Create an Ad Manager connection
 
@@ -41,11 +41,11 @@ class GoogleAdManager(object):
         self.verbose = verbose
         if self.verbose: print("Initializing Google Ad Manager...")
         # If the Google API key is passed, use it to build a connection, otherwise look for the YAML
-        if credentials_file: self.client = self._oauth2_client(credentials_file)
+        if credentials_file: self.client = self._oauth2_client(credentials_file, network_code=network_code)
         else: self.client = ad_manager.AdManagerClient.LoadFromStorage()
         if self.verbose: print("done.\n")
 
-    def _oauth2_client(self, credentials_file, application_name="The Seattle Times DFP"):
+    def _oauth2_client(self, credentials_file, application_name="The Seattle Times DFP", network_code):
         """
         Create a client given a Google API Keyfile.
         """
@@ -53,7 +53,7 @@ class GoogleAdManager(object):
         #NOTE: created this function to move things out of the constructor, but
         #NOTE: (cont) we may want to move all of the client functions here.
         oauth2_client = oauth2.GoogleServiceAccountClient(credentials_file, oauth2.GetAPIScope('ad_manager'))
-        ad_client = ad_manager.AdManagerClient(oauth2_client, application_name)
+        ad_client = ad_manager.AdManagerClient(oauth2_client, application_name, network_code)
         return ad_client
 
     #***************************************************************************
