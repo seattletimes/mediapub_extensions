@@ -17,7 +17,7 @@ class GoogleAnalytics(object):
         self.VIEW_ID = view_id
         if self.verbose: print("connecting to Google Analytics.... ")
         credentials = ServiceAccountCredentials.from_json_keyfile_name(self.KEY_FILE_LOCATION, self.SCOPES)
-        self.analytics = build('analytics', 'v4', credentials=credentials)
+        self.analytics = build('analyticsreporting', 'v4', credentials=credentials)
         if self.verbose: print("Google Analytics connected. ")
 
     def multithreaded_query(self, params):
