@@ -252,6 +252,8 @@ class GoogleAdManager(object):
 
 
 if __name__ == '__main__':
+    print("Don't call directly.  Install package and import as a class.")
+    
     dfp = GoogleAdManager(verbose=True)
 
     # Sample Query

@@ -160,6 +160,8 @@ class Snowflake():
 
 
 if __name__=='__main__':
+    print("Don't call directly.  Install package and import as a class.")
+
     sf = Snowflake()
     sf.set_environment_settings("ETL_PULL", "ST_WEB", "ST_WEB_WH_PROD_ETL", "WEB_PROD")
     print(sf.get_snowflake_version())

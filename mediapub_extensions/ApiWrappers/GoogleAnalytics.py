@@ -135,6 +135,8 @@ class GoogleAnalytics(object):
 
 
 if __name__=='__main__':
+    print("Don't call directly.  Install package and import as a class.")
+    
     import datetime
     ga = GoogleAnalytics(key_path, 'fake-ga-property', verbose=True)
     queries = {
