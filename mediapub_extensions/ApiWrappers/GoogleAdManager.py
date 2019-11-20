@@ -20,6 +20,7 @@ class GoogleAdManager(object):
 
     client = None
     verbose = False
+    default_version='v201908'
 
 
     #********************************************************
@@ -79,7 +80,7 @@ class GoogleAdManager(object):
         #TODO: Do this!!
         raise NotImplementedError
 
-    def get_service(self, service='reporting', version='v201908'):
+    def get_service(self, service='reporting', version=None):
         """
         Get a Service
 
@@ -97,6 +98,8 @@ class GoogleAdManager(object):
             https://github.com/googleads/googleads-python-lib/blob/master/googleads/ad_manager.py#L46-L131
         """
 
+        if version is None: version=self.default_version
+
         # Confirm that the request is for a valid service.
         # NOTE: Google's errors are fairly clear when there is an incorrect version number,
         # NOTE (cont): but less clear about an invalid service.  Handling that case here to make it more obvious.
@@ -105,8 +108,10 @@ class GoogleAdManager(object):
         service = self.client.GetService(service, version=version)
         return service
 
-    def get_statement(self, version='v201908'):
+    def get_statement(self, version=None):
         """ Return a statement builder """
+
+        if version is None: version=self.default_version
 
         # TODO: IT would be nice is this versioning worked together with the version
         # TODO (cont): in get_service() instead of having to send it twice.
@@ -116,7 +121,7 @@ class GoogleAdManager(object):
     # Data Request Methods
     #***************************************************************************
 
-    def run_pql(self, query, version='v201808'):
+    def run_pql(self, query, version=None):
         """
         Run a PQL query
 
@@ -135,11 +140,14 @@ class GoogleAdManager(object):
             https://developers.google.com/ad-manager/api/pqlreference
             https://developers.google.com/ad-manager/api/deprecation
         """
+
+        if version is None: version=self.default_version
+
         data_downloader = self.client.GetDataDownloader(version)
         resp = data_downloader.DownloadPqlResultToList(query)
         return resp
 
-    def run_request(self, report_job, version='v201808'):
+    def run_request(self, report_job, version=None):
         """
         Run an Ad Exchange request
 
@@ -158,6 +166,8 @@ class GoogleAdManager(object):
             https://developers.google.com/ad-manager/api/adx_reporting_migration#metrics_columns
             https://developers.google.com/ad-manager/api/reference/v201802/ReportService.Column
         """
+
+        if version is None: version=self.default_version
 
         # Run request and wait for the response
         data_downloader = self.client.GetDataDownloader(version)
@@ -221,8 +231,8 @@ class GoogleAdManager(object):
         """
 
         # Get the a Service and StatementBuilder to handle the request
-        company_service = self.get_service('CompanyService', version='v201908')
-        statement = self.get_statement(version='v201908')
+        company_service = self.get_service('CompanyService', version=self.default_version)
+        statement = self.get_statement(version=self.default_version)
         # Creating the response outside of the loop
         returned_response = {'totalResults': 0, 'response': []}
 
