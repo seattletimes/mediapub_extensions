@@ -87,6 +87,7 @@ class BigQuery(object):
 
     def wait_for_job(self,job):
         """ Blocking poll for query status """
+
         if self.verbose: print("Waiting for results...")
         while True:
             job.reload()

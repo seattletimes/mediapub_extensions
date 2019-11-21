@@ -135,32 +135,22 @@ class GoogleAnalytics(object):
 
 
 if __name__=='__main__':
+    print("Don't call directly.  Install package and import as a class.")
+    
     import datetime
-    key_path = os.path.join(os.path.abspath(os.sep), 'Users', 'dparks', 'BigQuery-422148a82d7c.json')
-
-    for i in range(1):
-        ga = GoogleAnalytics(key_path, '91048887', verbose=True)
-        # queries = {
-        #     'metrics': ['ga:pageviews', 'ga:users'],
-        #     'dimensions': [
-        #         'ga:date',
-        #         # 'ga:dimension18', # articleId
-        #         # 'ga:dimension40', # pubdate
-        #     ],
-        #     'filters': {'ga:date': datetime.datetime.now().strftime("%Y%m%d")}
-        # }
-        queries = {
-            "metrics": ["ga:exitRate", "ga:pageviews"],
-            "dimensions": ["ga:year"],
-            # "dimensions": ["ga:dimension18", "ga:dimension17", "ga:dimension40", "ga:dimension4"],
-            "date": [{"startDate": "2017-05-01", "endDate": "2017-08-14"}],
-            "filters": {"ga:dimension4": "real-estate"},
-            "orderBys": [
-                {"fieldName": "ga:dimension40", "sortOrder": "ASCENDING"}
-            ]
-        }
-        ga.add_query_to_request(queries)
-        results = ga.parse_response(ga.send_requests())
-        print(i, results)
-        ga.flush_requests()
-        ga = None
+    ga = GoogleAnalytics(key_path, 'fake-ga-property', verbose=True)
+    queries = {
+        "metrics": ["ga:exitRate", "ga:pageviews"],
+        "dimensions": ["ga:year"],
+        # "dimensions": ["ga:dimension18", "ga:dimension17", "ga:dimension40", "ga:dimension4"],
+        "date": [{"startDate": "2017-05-01", "endDate": "2017-08-14"}],
+        "filters": {"ga:dimension4": "real-estate"},
+        "orderBys": [
+            {"fieldName": "ga:dimension40", "sortOrder": "ASCENDING"}
+        ]
+    }
+    ga.add_query_to_request(queries)
+    results = ga.parse_response(ga.send_requests())
+    print(i, results)
+    ga.flush_requests()
+    ga = None

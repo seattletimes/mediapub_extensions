@@ -108,6 +108,8 @@ class SQLServer():
 
 
 if __name__=='__main__':
+    print("Don't call directly.  Install package and import as a class.")
+    
     # print(pyodbc.drivers()) # Run to see a list of installed drivers
     sql = SQLServer()
     query = 'SELECT * FROM [AUDREPMETA].[reporting].[starts]'
