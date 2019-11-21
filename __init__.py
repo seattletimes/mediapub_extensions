@@ -5,6 +5,6 @@ from mediapub_extensions.ApiWrappers.BigQuery import BigQuery
 from mediapub_extensions.ApiWrappers.SQLServer import SQLServer
 from mediapub_extensions.ApiWrappers.GoogleAdManager import GoogleAdManager
 
-__version__ = '0.1.1.alpha'
+__version__ = '1.0.beta'
 __author__ = 'David Parks businessintelligence@seattletimes.com'
 __all__ = []

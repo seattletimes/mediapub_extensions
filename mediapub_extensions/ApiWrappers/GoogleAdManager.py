@@ -61,14 +61,21 @@ class GoogleAdManager(object):
     # General Methods
     #***************************************************************************
 
+    def set_api_version(self, version):
+        """ Change the version of googleads API """
+
+        self.default_version = version
+
     def get_all_networks(self):
         """ Get a List of all Networks on the Account"""
+
         network_service = self.get_service("NetworkService")
         networks = network_service.getAllNetworks()
         return networks
 
     def get_current_network(self):
         """ Get a the Current Network Set on the Account"""
+
         network_service = self.get_service("NetworkService")
         network = network_service.getCurrentNetwork()
         return network
@@ -253,7 +260,7 @@ class GoogleAdManager(object):
 
 if __name__ == '__main__':
     print("Don't call directly.  Install package and import as a class.")
-    
+
     dfp = GoogleAdManager(verbose=True)
 
     # Sample Query
