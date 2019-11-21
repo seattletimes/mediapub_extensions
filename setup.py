@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="mediapub_extensions",
-    version='0.1.0.alpha1',
+    version='1.0.beta',
     url='TBD',
     license="Apache 2.0",
     author="David Parks",
@@ -16,7 +16,7 @@ setup(
                       'google-cloud==0.27.0',
                       'oauth2client==4.1.2',
                       'pyodbc',
-                      'googleads==14.1.0'
+                      'googleads==20.0.0'
                       ]
     # setup_requires=[],
     # test_suite=''

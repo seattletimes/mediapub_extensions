@@ -170,6 +170,8 @@ class Wordpress(object):
         return url
 
 if __name__=="__main__":
+    print("Don't call directly.  Install package and import as a class.")
+    
     wp = Wordpress()
     posts_stage = wp.get_posts(datalayer=1, per_page=2, env='stage', page=1)
     posts_prod = wp.get_posts(datalayer=1, per_page=10, env='prod', after='2018-05-07T07:30:00', before='2018-05-07T08:30:59')
