@@ -20,8 +20,9 @@ class Wordpress(object):
     base_prod_url =  None
     base_stage_url =  None
     headers = None
+    timeout = 60
 
-    def __init__(self, prod_url='https://seattletimes.com/wp-json/', stage_url='https://staging.seattletimes.com/wp-json/'):
+    def __init__(self, prod_url='https://seattletimes.com/wp-json-cached/', stage_url='https://staging.seattletimes.com/wp-json-cached/', timeout=60):
         """
         Connection class for Wordpress API
 
@@ -34,6 +35,7 @@ class Wordpress(object):
         #TODO: This should probably have some validation at some point.
         self.base_prod_url = prod_url
         self.base_stage_url = stage_url
+        self.timeout = timeout
         self.set_headers()
 
     def set_headers(self, user_agent='BICrawler/2.0.PA', email='businessintelligence@seattletimes.com'):
@@ -116,8 +118,7 @@ class Wordpress(object):
         # If a specific page was requested pull that item and return without iterating
         if page or post_id:
             try:
-                print(url)
-                response = requests.get(url, self.headers)
+                response = requests.get(url, headers=self.headers, timeout=self.timeout)
                 items = self.__handle_response(response)
             except IndexError as e: #TODO: these exceptions should be a bit more robust.
                 return []
@@ -132,9 +133,8 @@ class Wordpress(object):
                     # Replace the page param with an updated one.
                     #NOTE: This fails to replace on the first iteration since there is no page -1 value found.  Expected.
                     url = url.replace('&page=' + str(page - 1), '&page=' + str(page))
-                    # print(url)
                     try:
-                        response = requests.get(url, self.headers)
+                        response = requests.get(url, headers=self.headers, timeout=self.timeout)
                         items.extend(self.__handle_response(response))
                     except IndexError as e: # when the last page is reached stop iter
                         break
@@ -171,7 +171,7 @@ class Wordpress(object):
 
 if __name__=="__main__":
     print("Don't call directly.  Install package and import as a class.")
-    
+
     wp = Wordpress()
     posts_stage = wp.get_posts(datalayer=1, per_page=2, env='stage', page=1)
     posts_prod = wp.get_posts(datalayer=1, per_page=10, env='prod', after='2018-05-07T07:30:00', before='2018-05-07T08:30:59')

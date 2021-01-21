@@ -109,10 +109,11 @@ class SQLServer():
 
 if __name__=='__main__':
     print("Don't call directly.  Install package and import as a class.")
-    
+
     # print(pyodbc.drivers()) # Run to see a list of installed drivers
+    table = 'fake_name'
     sql = SQLServer()
-    query = 'SELECT * FROM [AUDREPMETA].[reporting].[starts]'
+    query = 'SELECT * FROM ' + table
     results = sql.run_query(query)
     cols = sql.get_cols()
     print(cols)

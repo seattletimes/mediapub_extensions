@@ -136,9 +136,11 @@ class GoogleAnalytics(object):
 
 if __name__=='__main__':
     print("Don't call directly.  Install package and import as a class.")
-    
+
     import datetime
-    ga = GoogleAnalytics(key_path, 'fake-ga-property', verbose=True)
+    key_path = None
+    ga_property = 'fake-ga-property'
+    ga = GoogleAnalytics(key_path, ga_property, verbose=True)
     queries = {
         "metrics": ["ga:exitRate", "ga:pageviews"],
         "dimensions": ["ga:year"],
@@ -151,6 +153,6 @@ if __name__=='__main__':
     }
     ga.add_query_to_request(queries)
     results = ga.parse_response(ga.send_requests())
-    print(i, results)
+    print(results)
     ga.flush_requests()
     ga = None

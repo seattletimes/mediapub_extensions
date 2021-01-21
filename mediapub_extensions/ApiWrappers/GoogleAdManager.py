@@ -20,7 +20,7 @@ class GoogleAdManager(object):
 
     client = None
     verbose = False
-    default_version='v201908'
+    default_version='v202011'
 
 
     #********************************************************
