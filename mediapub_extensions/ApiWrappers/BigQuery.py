@@ -134,7 +134,7 @@ class BigQuery(object):
         configs = bigquery.job.ExtractJobConfig(
                     destination_format = format,
                     print_header=header_row,
-                    field_delimeter = delimiter
+                    field_delimiter = delimiter
                   )
         if self.verbose: print("Starting load of {} to {} as {}".format(table_id, destination_url, job_id))
         extract_job = self.client.extract_table(table_ref, destination_url, job_id=job_id, job_config=configs)
@@ -171,12 +171,12 @@ class BigQuery(object):
 if __name__ == '__main__':
     print("Don't call directly.  Install package and import as a class.")
 
-    cred_file = None
-    project = 'fake-ga-project'
+    cred_file = '/var/www/analytics-hub/analyticsapi/st-analytics-connector/keys/BigQuery-422148a82d7c.json'
+    project = 'feisty-gateway-727'
     query = 'SELECT fullVisitorId, visitId, date FROM `bigquery-public-data.google_analytics_sample.ga_sessions_20170801` LIMIT 10'
-    dataset = 'api-tests'
-    table = "api_test"
-    bucket = 'api-tests'
+    dataset = 'stAdHoc'
+    table = "cp_influencers"
+    bucket = 'st-testbucket'
 
     bq = BigQuery(cred_file=cred_file, project=project, verbose=True)
     results =bq.run_query(query, destination_dataset=project + '.' + dataset, destination_table=table, truncate=True)
