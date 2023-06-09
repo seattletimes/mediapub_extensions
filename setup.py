@@ -11,7 +11,7 @@ setup(
     packages=find_packages(exclude=['tests']),
     # long_description=open('README.md').read(),
     zip_safe=False,
-    install_requires=['snowflake-connector-python==1.6.3',
+    install_requires=['snowflake-connector-python==3.0.2',
                       'google-api-python-client==1.7.4',
                       'google-cloud==0.27.0',
                       'oauth2client==4.1.2',
